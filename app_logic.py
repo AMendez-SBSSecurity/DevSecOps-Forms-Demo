@@ -6,26 +6,25 @@ import os
 import csv_operations
 import git_operations
 import configparser
-def logic(update_changes, id,food,note):
-    git_operations.clone_repo("./Automation","github.com/AMendez-SBSSecurity/DevSecOps-Demo.git")
-    csv_operations.fnctUpdatel_ine("./Automation/menu_person.csv","99","0,1,2",id,food,note)
+import conf
+def logic(update_changes, id,food,email,note):
+    git_operations.clone_repo("./Automation","github.com/AMendez-SBSSecurity/DevSecOps-WebApp-Demo.git")
+    csv_operations.fnctUpdatel_ine("./Automation/static/data.csv","99","0,1,2",id,food,note,email)
     #TODO Send mail
-    body =f'Hi {id},\n Your order of: {food} Has been successfully registered'
-    send_email(id + "Order Summary", body)
+    body =f'Hi {id},\n\nYour order of: {food} Has been successfully registered. Here are some places recomendations near you: \n' + "\n".join(conf.food[food])
+    send_email(email,id + "Order Summary", body)
     if update_changes:
         git_operations.push_changes("./Automation")
     if os.path.exists("./Automation"):
         os.system('cmd /c "rmdir /s /Q Automation"')
-
-
     
     print()
 
-def third_logic(id,food,note):
+def third_logic(id,food, email, note):
     if os.path.exists("./Automation"):
         os.system('cmd /c "rmdir /s /Q Automation"')
     git_operations.clone_repo("./Automation","github.com/AMendez-SBSSecurity/DevSecOps-WebApp-Demo.git")
-    csv_operations.fnctUpdatel_ine("./Automation/static/data.csv","99","0,1,2",id,food,note)
+    csv_operations.fnctUpdatel_ine("./Automation/static/data.csv","99","0,1,2",id,food,note,email)
 
     #Update Page Parameter
     config = configparser.ConfigParser()
@@ -45,10 +44,9 @@ def third_logic(id,food,note):
 # Define your email configuration
 EMAIL_FROM = "andresmendez9896@gmail.com"
 EMAIL_TO_1 = "andresmendez9896@gmail.com"
-EMAIL_TO_2 = "sergio.bascon@sbssecurity.io"
 
-def send_email(subject, body):
-    receivers = [EMAIL_TO_1, EMAIL_TO_2]
+def send_email(email, subject, body):
+    receivers = [EMAIL_TO_1, email]
     msg = MIMEMultipart()
     msg["From"] = EMAIL_FROM
     msg["To"] = ', '.join(receivers)

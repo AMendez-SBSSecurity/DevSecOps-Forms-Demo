@@ -10,16 +10,15 @@ def main():
     print("3. Third form")
     
     choice = int(input("Select a form (1 or 2): "))
-    git_operations.clone_repo("./WebApp","github.com/AMendez-SBSSecurity/DevSecOps-WebApp-Demo.git")
     if choice == 1:
-        name, food, note = forms.first_form()
-        app_logic.logic(False, name, food, note)
+        name, food, email ,note = forms.first_form()
+        app_logic.logic(False, name, food, email ,note)
     elif choice == 2:
-        name, food, note = forms.first_form()
-        app_logic.logic(True, name, food, note)
+        name, food, email, note = forms.first_form()
+        app_logic.logic(True, name, food, email ,note)
     elif choice == 3:
-        name, food, note = forms.first_form()
-        app_logic.third_logic(name, food, note)
+        name, food, email, note = forms.first_form()
+        app_logic.third_logic(name, food, email ,note)
     else:
         print("Invalid choice, please try again.")
         main()
